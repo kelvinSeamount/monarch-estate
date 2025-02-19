@@ -1,10 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import authRoute from "./route/auth.js";
+import userRoute from "./route/user.js";
 
 const app = express();
 dotenv.config();
 
+//Body parser
+app.use(express.json());
 mongoose
   .connect(process.env.MONGO)
   .then(() => {
@@ -19,4 +23,5 @@ app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
 
-//app.use("/api/user", userRoute);
+app.use("/api/user", userRoute);
+app.use("/api/auth", authRoute);
