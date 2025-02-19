@@ -25,3 +25,16 @@ app.listen(process.env.PORT, () => {
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
+
+//Middleware route
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  //message
+  const message = err.message || "Internal Server Error";
+  return res.status(statusCode).json({
+    message,
+    success: false,
+    statusCode,
+  });
+});
