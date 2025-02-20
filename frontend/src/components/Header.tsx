@@ -3,7 +3,7 @@ import Logo from "../assets/Logo.png";
 import { FaSearch } from "react-icons/fa";
 const Header = () => {
   return (
-    <div className="bg-white shadow-md">
+    <div className="bg-white shadow-md ">
       <div className="flex justify-between max-w-6xl mx-auto items-center p-3 h-[60px]">
         <Link to="/">
           <div className="font-bold">
