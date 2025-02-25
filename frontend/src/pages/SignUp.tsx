@@ -1,13 +1,9 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { SignUpFormPropsFormProps } from "../types";
 
-interface FormProps {
-  username?: string;
-  password?: string;
-  email?: string;
-}
 const SignUp = () => {
-  const [formData, setFormData] = useState<FormProps>({});
+  const [formData, setFormData] = useState<SignUpFormPropsFormProps>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -81,7 +77,10 @@ const SignUp = () => {
           onChange={handleChange}
         />
 
-        <button className="text-white bg-slate-700 p-3 hover:opacity-95 uppercase disabled:opacity-80 rounded-lg">
+        <button
+          disabled={loading}
+          className="text-white bg-slate-700 p-3 hover:opacity-95 uppercase disabled:opacity-80 rounded-lg"
+        >
           {loading ? "Loading" : "Sign Up"}
         </button>
       </form>
