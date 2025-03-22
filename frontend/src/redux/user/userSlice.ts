@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserState } from "../../types";
+import { User, UserState } from "../../types";
 
 const initialState: UserState = {
   currentUser: null,
@@ -15,8 +15,8 @@ const userSlice = createSlice({
       state.loading = true;
     }),
 
-    sigInSuccess: create.reducer((state, action: PayloadAction<UserState>) => {
-      state.currentUser = action.payload.currentUser;
+    sigInSuccess: create.reducer((state, action: PayloadAction<User>) => {
+      state.currentUser = action.payload;
       state.loading = false;
       state.error = "";
     }),
@@ -30,13 +30,11 @@ const userSlice = createSlice({
       state.loading = true;
     }),
 
-    updateUserSuccess: create.reducer(
-      (state, action: PayloadAction<UserState>) => {
-        state.currentUser = action.payload.currentUser;
-        state.loading = false;
-        state.error = "";
-      }
-    ),
+    updateUserSuccess: create.reducer((state, action: PayloadAction<User>) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.error = "";
+    }),
 
     updateUserFailure: create.reducer(
       (state, action: PayloadAction<string>) => {
