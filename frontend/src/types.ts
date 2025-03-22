@@ -1,5 +1,12 @@
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+}
+
 export type UserState = {
-  currentUser: string | null;
+  currentUser: User | null;
   error: string | null;
   loading: boolean;
 };
