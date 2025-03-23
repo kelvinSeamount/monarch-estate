@@ -21,3 +21,10 @@ export interface SignInFormProps {
   password?: string;
   email?: string;
 }
+
+export interface UserFormData {
+  avatar?: string;
+  username?: string;
+  email?: string;
+  password?: string;
+}
