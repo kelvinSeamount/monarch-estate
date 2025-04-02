@@ -3,9 +3,11 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRoute from "./route/auth.js";
 import userRoute from "./route/user.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 dotenv.config();
+app.use(cookieParser());
 
 //Body parser
 app.use(express.json());
@@ -27,7 +29,6 @@ app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 
 //Middleware route
-
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   //message
