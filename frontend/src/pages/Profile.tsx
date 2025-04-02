@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
@@ -9,6 +9,11 @@ import {
 import { app } from "../firebase";
 import { RootState } from "../redux/storeSetup";
 import { UserFormData } from "../types";
+import {
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess,
+} from "../redux/user/userSlice";
 
 {
   /*  FIREBASE FILE STORAGE RULES
@@ -30,6 +35,8 @@ const Profile = () => {
   const [fileRate, setFileRate] = useState<number>(0);
   const [fileUploadError, setFileUploadError] = useState<boolean>(false);
   const [userFormData, setUserFormData] = useState<UserFormData>({});
+  const [updated, setUpdated] = useState(false);
+  const dispatch = useDispatch();
 
   // Ref for file input
   const fileRef = useRef<HTMLInputElement>(null);
@@ -52,7 +59,6 @@ const Profile = () => {
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -69,6 +75,37 @@ const Profile = () => {
         });
       }
     );
+  };
+
+  //function to handle form submit
+  const handleSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+        body: JSON.stringify(userFormData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+      dispatch(updateUserSuccess(data));
+      setUpdated(true);
+    } catch (error) {
+      if (error instanceof Error) {
+        dispatch(updateUserFailure(error.message));
+      } else {
+        dispatch(
+          updateUserFailure("An error occurred while updating user data")
+        );
+      }
+    }
   };
 
   // Handle form input changes
@@ -88,7 +125,7 @@ const Profile = () => {
         accept="image/*"
         onChange={(e) => setFile(e.target.files?.[0])}
       />
-      <form className="flex flex-col space-y-4">
+      <form className="flex flex-col space-y-4" onSubmit={handleSubmitForm}>
         <img
           src={userFormData.avatar || currentUser?.avatar}
           alt="profile"
@@ -143,6 +180,7 @@ const Profile = () => {
         <span className="text-red-700 cursor-pointer">Sign Out</span>
       </div>
       <p className="text-red-700 mt-4">{error ? error : ""}</p>
+      <p className="text-green-700 mt-4">{updated ? "User is updated" : ""}</p>
     </div>
   );
 };
