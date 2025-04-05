@@ -10,6 +10,9 @@ import { app } from "../firebase";
 import { RootState } from "../redux/storeSetup";
 import { UserFormData } from "../types";
 import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -113,6 +116,27 @@ const Profile = () => {
     setUserFormData({ ...userFormData, [e.target.id]: e.target.value });
   };
 
+  //delete user
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(error.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      if (error instanceof Error) {
+        dispatch(deleteUserFailure(error.message));
+      } else {
+        dispatch(deleteUserFailure("An error occurred while deleting user"));
+      }
+    }
+  };
   return (
     <div className="max-w-lg mx-auto p-3">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -176,7 +200,12 @@ const Profile = () => {
         </button>
       </form>
       <div className="flex items-center justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">Delete Account</span>
+        <span
+          className="text-red-700 cursor-pointer"
+          onClick={handleDeleteUser}
+        >
+          Delete Account
+        </span>
         <span className="text-red-700 cursor-pointer">Sign Out</span>
       </div>
       <p className="text-red-700 mt-4">{error ? error : ""}</p>
