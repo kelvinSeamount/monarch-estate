@@ -58,6 +58,21 @@ const userSlice = createSlice({
         state.loading = false;
       }
     ),
+    signUserOutStart: create.reducer((state) => {
+      state.loading = true;
+    }),
+    /* Backend returns string message so no need for the Payload*/
+    signUserOutSuccess: create.reducer((state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = "";
+    }),
+    signUserOutFailure: create.reducer(
+      (state, action: PayloadAction<string>) => {
+        state.error = action.payload;
+        state.loading = false;
+      }
+    ),
   }),
 });
 
@@ -71,5 +86,8 @@ export const {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signUserOutStart,
+  signUserOutSuccess,
+  signUserOutFailure,
 } = userSlice.actions;
 export default userSlice.reducer;
