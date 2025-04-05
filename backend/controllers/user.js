@@ -37,6 +37,7 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
+//Delete user API
 export const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id)
     return next(errorHandler(401, "you can only delete your account"));
