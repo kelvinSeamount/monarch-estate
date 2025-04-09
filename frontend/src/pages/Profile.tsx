@@ -20,6 +20,7 @@ import {
   updateUserStart,
   updateUserSuccess,
 } from "../redux/user/userSlice";
+import { Link } from "react-router-dom";
 
 {
   /*  FIREBASE FILE STORAGE RULES
@@ -57,7 +58,6 @@ const Profile = () => {
     if (file) {
       handleFileUpload(file);
     }
-    console.log(file, 99999999);
   }, [file]);
 
   const handleFileUpload = (file: File) => {
@@ -223,6 +223,12 @@ const Profile = () => {
         >
           {loading ? "Loading..." : "Update"}
         </button>
+        <Link
+          to={"/create-listing"}
+          className="bg-green-700 rounded-lg uppercase text-center hover:opacity-95 text-white p-3"
+        >
+          Create Listing
+        </Link>
       </form>
       <div className="flex items-center justify-between mt-5">
         <span
