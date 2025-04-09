@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import authRoute from "./route/auth.js";
 import userRoute from "./route/user.js";
 import cookieParser from "cookie-parser";
+import listingRoute from "./route/listing.js";
 
 const app = express();
 dotenv.config();
@@ -28,6 +29,8 @@ app.listen(process.env.PORT, () => {
 //Routes
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
+
+app.use("api/listing", listingRoute);
 
 //Middleware route
 app.use((err, req, res, next) => {
