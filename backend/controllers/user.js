@@ -1,4 +1,5 @@
 import User from "../models/user.models.js";
+import Listing from "../models/listing.models.js";
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 export const test = (req, res) => {
@@ -46,6 +47,25 @@ export const deleteUser = async (req, res, next) => {
     await User.findByIdAndDelete(req.params.id);
     res.cookie("access_token");
     res.status(200).json("User deleted successfully");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserListing = async (req, res, next) => {
+  try {
+    //check if its the real person/owner listing
+    if (req.user.id === req.params.id) {
+      try {
+        //Get the listings
+        const listings = await Listing.find({ user: req.params.id });
+        res.status(200).json(listings);
+      } catch (error) {
+        next(error);
+      }
+    } else {
+      return next(errorHandler(401, "You can veiw only listings"));
+    }
   } catch (error) {
     next(error);
   }
