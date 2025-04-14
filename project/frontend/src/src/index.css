@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  --font-family: "DM Sans", "serif";
+
+  /* ... */
+}
+body {
+  background-color: rgb(241, 245, 241);
+}

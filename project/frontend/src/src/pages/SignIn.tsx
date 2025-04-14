@@ -9,7 +9,6 @@ import {
 } from "../redux/user/userSlice";
 import { RootState } from "../redux/storeSetup";
 import Oauth from "../components/Oauth";
-
 const SignIn = () => {
   const [formData, setFormData] = useState<SignInFormProps>({});
   const { loading, error } = useSelector((state: RootState) => state.user);
@@ -95,4 +94,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-
